@@ -4,21 +4,23 @@ import com.fasterxml.jackson.databind.{ObjectMapper, SerializationFeature}
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.test.agoda.dao.HotelDao
-import com.test.agoda.resource.HotelFetcherResource
+import com.test.agoda.dao.{ApiKeyDao, CsvHotelDao, HotelDao}
+import com.test.agoda.resource.{ApiKeyResource, HotelFetcherResource}
 import io.dropwizard.Application
 import io.dropwizard.setup.Environment
-import com.test.agoda.business.{HotelsInfoFetcher, RequestsValidator}
+import com.test.agoda.business.{HotelFetcherManager, RequestsValidator}
 
 class HotelFinderApplication extends Application[HotelFetcherConfig] {
   override def getName: String = "Hotel_fetching-Application"
 
   override def run(t: HotelFetcherConfig, env: Environment): Unit = {
-    val hotelDao = new HotelDao
+    val hotelDao = new CsvHotelDao("hoteldb.csv")
+    val apiKeyDao = new ApiKeyDao
     hotelDao.init()
     val requestsvalidator = new RequestsValidator
-    val hotelsInfoFetcher = new HotelsInfoFetcher(hotelDao, requestsvalidator)
+    val hotelsInfoFetcher = new HotelFetcherManager(hotelDao, apiKeyDao)
     env.jersey().register(new HotelFetcherResource(hotelsInfoFetcher))
+    env.jersey().register(new ApiKeyResource(hotelsInfoFetcher))
     env.jersey.register(jacksonJaxbJsonProvider)
   }
 

@@ -5,11 +5,11 @@ import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.Response
 import javax.ws.rs._
 
-import com.test.agoda.business.HotelsInfoFetcher
-import com.test.agoda.exceptions.RateLimitExhaustedException
+import com.test.agoda.business.HotelFetcherManager
+import com.test.agoda.exceptions.{KeyNotFoundException, RateLimitExhaustedException}
 
 @Path("/hotel")
-class HotelFetcherResource (val hotelsInfoFetcher: HotelsInfoFetcher) {
+class HotelFetcherResource (val hotelsInfoFetcher: HotelFetcherManager) {
 
     @GET
     @Path("/{city}")
@@ -19,12 +19,15 @@ class HotelFetcherResource (val hotelsInfoFetcher: HotelsInfoFetcher) {
 
         var response:Response = null
         try {
+            hotelsInfoFetcher.validateRequest(apiKey)
             val hotels = hotelsInfoFetcher.getHotelsForCity(apiKey, city, sortType)
             response = Response.ok.entity(hotels).build()
 
         } catch {
             case ex : RateLimitExhaustedException =>
                 response = Response.status(429).entity(ex.getMessage).build()
+            case ex : KeyNotFoundException =>
+                response = Response.status(400).entity(ex.getMessage).build()
         }
         response
     }
