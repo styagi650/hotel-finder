@@ -8,7 +8,7 @@ class CsvHotelDao(fileName : String) extends HotelDao {
   private var hotels:Map[Int, Hotel] = Map()
   private var cityToHotelsIndex:Map[String, Seq[Int]] = Map()
 
-  def init(): Unit = {
+  override def init(): Unit = {
     val lines : Iterator[String] = Source.fromURL(getClass.getResource("/" + fileName)).getLines
     lines.foreach(line => {
       val data = line.split(",")

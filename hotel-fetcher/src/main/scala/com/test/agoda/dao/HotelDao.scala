@@ -4,6 +4,8 @@ import com.test.agoda.entity._
 
 abstract class HotelDao {
 
+  def init()
+
   def getHotelForCity(city : String): Seq[Hotel]
 
   def getHotelsSortByPrice(city: String, sortType: String): Seq[Hotel] = {
