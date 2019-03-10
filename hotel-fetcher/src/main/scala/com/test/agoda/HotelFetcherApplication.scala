@@ -10,7 +10,7 @@ import io.dropwizard.Application
 import io.dropwizard.setup.Environment
 import com.test.agoda.business.HotelFetcherManager
 
-class HotelFinderApplication extends Application[HotelFetcherConfig] {
+class HotelFetcherApplication extends Application[HotelFetcherConfig] {
   override def getName: String = "Hotel_fetching-Application"
 
   override def run(t: HotelFetcherConfig, env: Environment): Unit = {
@@ -39,7 +39,7 @@ class HotelFinderApplication extends Application[HotelFetcherConfig] {
 
 object Main {
   def main(args: Array[String]): Unit = {
-    new HotelFinderApplication().run(args: _*)
+    new HotelFetcherApplication().run(args: _*)
   }
 }
 

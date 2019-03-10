@@ -1,10 +1,9 @@
 package com.test.agoda.business
 
-import java.util.concurrent.ConcurrentHashMap
 
 import com.test.agoda.dao.{ApiKeyDao, HotelDao}
 import com.test.agoda.entity.Hotel
-import com.test.agoda.exceptions.{KeyNotFoundException, RateLimitExhaustedException}
+import com.test.agoda.exceptions.{KeyAlreadyExistsException, KeyNotFoundException, RateLimitExhaustedException}
 
 class HotelFetcherManager(val hotelsDao: HotelDao, val apiKeyDao: ApiKeyDao) {
 
@@ -12,8 +11,12 @@ class HotelFetcherManager(val hotelsDao: HotelDao, val apiKeyDao: ApiKeyDao) {
     hotelsDao.getHotelsSortByPrice(city, sortType)
   }
 
-  def createOrUpdateApiKeyEntry(apiKey: String, permits: Int): Unit = {
-    apiKeyDao.createOrUpdate(apiKey, permits)
+  def create(apiKey: String, permits: Int): Unit = {
+    try {
+      apiKeyDao.create(apiKey, permits)
+    } catch {
+      case ex: KeyAlreadyExistsException => throw ex
+    }
   }
 
   def validateRequest(apiKey: String): Unit = {
