@@ -30,43 +30,29 @@ class HotelDao {
     this.hotels(hotelId)
   }
 
-  def getHotelForCity(city: String) : Seq[Hotel] = {
+  private def getHotelForCity(city: String) : Seq[Hotel] = {
       this.cityToHotelsIndex(city).map(this.getHotelById).toList
   }
 
-//  def getHotelsSortByPrice(city: String, sortType: String = "asc"): Seq[Hotel] = {
-//    val hotels = getHotelForCity(city)
-//    sortType match {
-//      case "asc" =>
-//        hotels.s(new HotelsDao#PriceAscendingsort)
-//        break //todo: break is not supported
-//      case "desc" =>
-//        hotels.sort(new HotelsDao#PriceDescendingsort)
-//        break //todo: break is not supported
-//    }
-//    hotels
-//  }
-//
-//  private[test] class PriceAscendingsort extends Nothing {
-//    private[test] val eps = 1e-6
-//
-//    // Used for sorting in ascending order of
-//    // roll number
-//    def compare(a: Nothing, b: Nothing): Int = {
-//      val diff = a.price - b.price
-//      if (diff < eps) return -1
-//      1
-//    }
-//  }
-//
-//  private[test] class PriceDescendingsort extends Nothing {
-//    private[test] val eps = 1e-6
-//
-//    // roll name
-//    def compare(a: Nothing, b: Nothing): Int = {
-//      val diff = a.price - b.price
-//      if (diff > eps) return -1
-//      1
-//    }
-//  }
+  def getHotelsSortByPrice(city: String, sortType: String): Seq[Hotel] = {
+    var hotels = getHotelForCity(city)
+    sortType match {
+      case "asc" =>
+        hotels = hotels.sortWith(priceAscendingsort)
+      case "desc" =>
+        hotels = hotels.sortWith(priceDescendingsort)
+      case default =>
+        new IllegalArgumentException("Invalid sort Type")
+    }
+    hotels
+  }
+
+  private def priceAscendingsort (hotel1 : Hotel, hotel2 : Hotel) : Boolean = {
+      hotel1.price < hotel2.price
+  }
+
+  private def priceDescendingsort (hotel1 : Hotel, hotel2 : Hotel) : Boolean = {
+    hotel1.price > hotel2.price
+  }
+
 }

@@ -8,6 +8,7 @@ import com.test.agoda.dao.HotelDao
 import com.test.agoda.resource.HotelFetcherResource
 import io.dropwizard.Application
 import io.dropwizard.setup.Environment
+import com.test.agoda.business.{HotelsInfoFetcher, RequestsValidator}
 
 class HotelFinderApplication extends Application[HotelFetcherConfig] {
   override def getName: String = "Hotel_fetching-Application"
@@ -15,7 +16,9 @@ class HotelFinderApplication extends Application[HotelFetcherConfig] {
   override def run(t: HotelFetcherConfig, env: Environment): Unit = {
     val hotelDao = new HotelDao
     hotelDao.init()
-    env.jersey().register(new HotelFetcherResource(hotelDao))
+    val requestsvalidator = new RequestsValidator
+    val hotelsInfoFetcher = new HotelsInfoFetcher(hotelDao, requestsvalidator)
+    env.jersey().register(new HotelFetcherResource(hotelsInfoFetcher))
     env.jersey.register(jacksonJaxbJsonProvider)
   }
 
