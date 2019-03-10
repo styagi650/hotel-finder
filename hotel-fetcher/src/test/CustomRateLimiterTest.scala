@@ -1,7 +1,7 @@
 import java.util.concurrent.{Executors, Future, TimeUnit}
 import java.util.concurrent.atomic.AtomicInteger
 
-import com.test.agoda.business.{CustomRateLimiter, RequestsValidator}
+import com.test.agoda.business.CustomRateLimiter
 import org.scalatest.FunSuite
 
 class CustomRateLimiterTest extends FunSuite {
