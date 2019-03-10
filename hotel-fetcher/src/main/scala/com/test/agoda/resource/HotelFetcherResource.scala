@@ -6,7 +6,6 @@ import javax.ws.rs.core.Response
 import javax.ws.rs._
 
 import com.test.agoda.business.HotelsInfoFetcher
-import com.test.agoda.entity.Hotel
 import com.test.agoda.exceptions.RateLimitExhaustedException
 
 @Path("/hotel")
