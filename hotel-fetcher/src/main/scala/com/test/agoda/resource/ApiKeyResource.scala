@@ -19,10 +19,9 @@ class ApiKeyResource (val hotelFetcherManager: HotelFetcherManager) {
     try {
       hotelFetcherManager.create(apiKey, permits)
       response = Response.ok.entity("Success").build()
-
     } catch {
       case ex : KeyAlreadyExistsException =>
-        response = Response.status(Response.Status.INTERNAL_SERVER_ERROR).build()
+        response = Response.status(Response.Status.CONFLICT).build()
     }
     response
   }

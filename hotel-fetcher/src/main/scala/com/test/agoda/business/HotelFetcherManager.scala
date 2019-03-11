@@ -7,7 +7,7 @@ import com.test.agoda.exceptions.{KeyAlreadyExistsException, KeyNotFoundExceptio
 
 class HotelFetcherManager(val hotelsDao: HotelDao, val apiKeyDao: ApiKeyDao) {
 
-  def getHotelsForCity(apiKey: String, city: String, sortType: String): Seq[Hotel] = {
+  def getHotelsForCity(city: String, sortType: String): Seq[Hotel] = {
     hotelsDao.getHotelsSortByPrice(city, sortType)
   }
 

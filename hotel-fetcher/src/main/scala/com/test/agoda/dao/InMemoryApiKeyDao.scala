@@ -10,7 +10,7 @@ class InMemoryApiKeyDao extends ApiKeyDao {
 
   override def create(apiKey:String, permits:Int): Unit = {
     if(keyToRateLimiter.containsKey(apiKey)) {
-      throw new KeyAlreadyExistsException("Api is already registered. Please create some other key")
+      throw new KeyAlreadyExistsException("Api key is already registered. Please create some other key")
     }
     keyToRateLimiter.put(apiKey, new CustomRateLimiter(apiKey, permits))
   }

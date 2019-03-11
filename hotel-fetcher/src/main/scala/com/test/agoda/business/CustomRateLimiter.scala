@@ -1,14 +1,11 @@
 package com.test.agoda.business
 
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicInteger
-
-import com.test.agoda.exceptions.RateLimitExhaustedException
 
 import scala.collection.{SortedMap, mutable}
 import scala.concurrent.duration.Duration
 
-class CustomRateLimiter(val key: String, var maxPermits:Int = 10, val suspensionTime :Int = 5, val timeUnit: TimeUnit = TimeUnit.MINUTES) {
+class CustomRateLimiter(val key: String, var maxPermits:Int, val suspensionTime :Int = 5, val timeUnit: TimeUnit = TimeUnit.MINUTES) {
 
   private val duration: Long = Duration(1, TimeUnit.SECONDS).toMillis
   private val suspendedDuration: Long = Duration(suspensionTime, timeUnit).toMillis
@@ -32,7 +29,7 @@ class CustomRateLimiter(val key: String, var maxPermits:Int = 10, val suspension
 
     var acquired = false
 
-    //Suspend if num of tasks exceeds maxPermits
+    //Suspend if num of tasks exceeds or eqaul to maxPermits
     if (permits == maxPermits) {
       suspended = currentTime
     } else {
@@ -43,7 +40,6 @@ class CustomRateLimiter(val key: String, var maxPermits:Int = 10, val suspension
       permits = permits + 1
       acquired = true
     }
-
     acquired
   }
 

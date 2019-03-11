@@ -1,5 +1,7 @@
-import java.util.concurrent.{Executors, Future, TimeUnit}
+package scala
+
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.{Executors, Future, TimeUnit}
 
 import com.test.agoda.business.CustomRateLimiter
 import org.scalatest.FunSuite
@@ -16,7 +18,6 @@ class CustomRateLimiterTest extends FunSuite {
         override def run(): Unit = {
           val acquired = rateLimiter.tryAcquire()
           if(acquired) count.set(count.get() + 1)
-          println("Lock status for i " + acquired)
         }
       })
 

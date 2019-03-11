@@ -20,7 +20,7 @@ class HotelFetcherResource (val hotelsInfoFetcher: HotelFetcherManager) {
         var response:Response = null
         try {
             hotelsInfoFetcher.validateRequest(apiKey)
-            val hotels = hotelsInfoFetcher.getHotelsForCity(apiKey, city, sortType)
+            val hotels = hotelsInfoFetcher.getHotelsForCity(city, sortType)
             response = Response.ok.entity(hotels).build()
 
         } catch {
